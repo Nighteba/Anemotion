@@ -13,10 +13,15 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.Stage;
+/**
+ * Classe representant tout element audio utilise par l'app.
+ * @author JLM
+ *
+ */
 public class ElementAudio extends Application 
 {
 	//fichier audio exemple
-	String pathname = "Your/Path/Ends/Here";
+	String pathname = "C:\\Users\\Gebruiker\\Music\\JLMusic\\OST\\Seiken Densetsu 3 OST - 35 - Innocent Water.mp3";
 	
 	private Button boutonPlayPause,boutonStop;
 	/**
@@ -28,7 +33,7 @@ public class ElementAudio extends Application
     }
     
     /**
-     * 
+     * @pre Le String du fichier devrait être non vide. (ça vaut mieux)
      * @param nomFichier
      */
     public void setPath(String nomFichier) 
@@ -39,7 +44,7 @@ public class ElementAudio extends Application
     
     /**
      * 
-     * @return
+     * @return pathname , le chemin du fichier.
      */
     public String getPath() 
     {
