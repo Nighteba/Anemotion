@@ -1,0 +1,109 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import java.awt.BorderLayout;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JMenu;
+import java.awt.Color;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+
+public class MainGUI {
+
+	private JFrame frame;
+	private final JScrollBar scrollBar = new JScrollBar();
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MainGUI window = new MainGUI();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public MainGUI() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.getContentPane().setBackground(Color.DARK_GRAY);
+		frame.setBounds(90, 30, 1000, 700);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JLayeredPane layeredPane = new JLayeredPane();
+		frame.getContentPane().add(layeredPane, BorderLayout.CENTER);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBackground(Color.GRAY);
+		menuBar.setBounds(0, 0, 1300, 40);
+		layeredPane.add(menuBar);
+		
+		JMenu mnFichier = new JMenu("Fichier");
+		mnFichier.setForeground(Color.LIGHT_GRAY);
+		mnFichier.setBackground(Color.GRAY);
+		menuBar.add(mnFichier);
+		
+		JMenu mnEdition = new JMenu("Edition");
+		mnEdition.setForeground(Color.LIGHT_GRAY);
+		mnEdition.setBackground(Color.GRAY);
+		menuBar.add(mnEdition);
+		
+		JMenu mnImage = new JMenu("Image");
+		mnImage.setForeground(Color.LIGHT_GRAY);
+		menuBar.add(mnImage);
+		
+		JMenu mnAudio = new JMenu("Audio");
+		mnAudio.setForeground(Color.LIGHT_GRAY);
+		menuBar.add(mnAudio);
+		
+		JMenu mnVideo = new JMenu("Video");
+		mnVideo.setForeground(Color.LIGHT_GRAY);
+		menuBar.add(mnVideo);
+		
+		JMenu mnCalque = new JMenu("Calque");
+		mnCalque.setForeground(Color.LIGHT_GRAY);
+		menuBar.add(mnCalque);
+		
+		JMenu mnSelection = new JMenu("Selection");
+		mnSelection.setForeground(Color.LIGHT_GRAY);
+		menuBar.add(mnSelection);
+		
+		JMenu mnFenetre = new JMenu("Fenetre");
+		mnFenetre.setForeground(Color.LIGHT_GRAY);
+		menuBar.add(mnFenetre);
+		
+		JMenu mnAide = new JMenu("Aide");
+		mnAide.setForeground(Color.LIGHT_GRAY);
+		menuBar.add(mnAide);
+		
+		JMenuBar menuBar_1 = new JMenuBar();
+		menuBar_1.setBackground(Color.GRAY);
+		menuBar_1.setBounds(0, 34, 70, 800);
+		layeredPane.add(menuBar_1);
+		menuBar_1.add(scrollBar);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(90, 51, 1200, 600);
+		scrollPane.setBackground(Color.DARK_GRAY);
+		layeredPane.add(scrollPane);
+		scrollPane.setVisible(false);
+        
+	}
+}
