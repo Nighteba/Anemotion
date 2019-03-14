@@ -1,0 +1,138 @@
+import java.io.File;
+
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.AudioSpectrumListener;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.scene.media.MediaPlayer.Status;
+import javafx.stage.Stage;
+public class ElementAudio extends Application 
+{
+	//fichier audio exemple
+	String pathname = "Your/Path/Ends/Here";
+	
+	private Button boutonPlayPause,boutonStop;
+	/**
+	 * 
+	 * @param args
+	 */
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
+    
+    /**
+     * 
+     * @param nomFichier
+     */
+    public void setPath(String nomFichier) 
+    {
+    	pathname = nomFichier;
+    	
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public String getPath() 
+    {
+    	return pathname;
+    	
+    }
+    
+    /**
+     * 
+     */
+    public void crop() 
+    {
+    	
+    	
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+
+        StackPane root = new StackPane();
+   
+        final File fichier = new File(pathname); 
+        final Media media = new Media(fichier.toURI().toString()); 
+        final MediaPlayer lecteurMedia = new MediaPlayer(media); 
+        int spectreAudio = lecteurMedia.getAudioSpectrumThreshold();
+        
+        MediaView mediaView = new MediaView(lecteurMedia);  
+
+        mediaView.setFitWidth(400);
+      	mediaView.setFitHeight(500);
+      	mediaView.setSmooth(true);
+
+        root.getChildren().add(mediaView);
+
+        Scene scene = new Scene(root, 750, 300);
+        
+		boutonPlayPause = new Button("Play");
+
+		//Gestion evenementielle pour le bouton Play/Pause
+				// Le bouton n'update pas sa value au 1er event de pause, a verif.
+		boutonPlayPause.setOnAction(new EventHandler <ActionEvent>()
+				{
+		            public void handle(ActionEvent event)
+		            {
+		            	if (lecteurMedia.getStatus() == Status.PLAYING)
+		            	{
+		            		lecteurMedia.pause();
+		            		boutonPlayPause.setText("Play");
+
+		            		
+		            	}
+		            	else
+		            	{
+		            		lecteurMedia.play();
+		            		boutonPlayPause.setText("Pause");
+		            	}
+		            }
+		        });
+
+      		
+      	boutonStop = new Button("Stop");
+      	boutonStop.setOnAction(new EventHandler <ActionEvent>()
+      		{
+                  public void handle(ActionEvent event)
+                  {
+                  	lecteurMedia.stop();
+                  }
+              });
+
+              //Creation de la Horizontal Box, siege des boutons de controle
+
+      		HBox controlBox = new HBox(5, boutonPlayPause, boutonStop);
+      		
+    		root.getChildren().add(controlBox);
+
+      		
+      		root.setStyle("-fx-padding: 10;" +
+      						"-fx-border-style: solid inside;" +
+      						"-fx-border-width: 2;" +
+      						"-fx-border-insets: 5;" +
+      						"-fx-border-radius: 5;" +
+      						"-fx-border-color: #29a329;");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        
+
+
+        ControleElement mediaControl = new ControleElement(lecteurMedia);
+        scene.setRoot(mediaControl);
+
+       lecteurMedia.play();
+
+    }
+
+	
+}
