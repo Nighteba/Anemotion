@@ -1,0 +1,164 @@
+import java.io.File;
+
+import javafx.application.Application;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.scene.media.MediaPlayer.Status;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+
+/**
+ * Classe representant un element de type video. 
+ */
+public class ElementVideo extends Application 
+{
+	//fichier exemple
+	String cheminMedia = "C:/est/dici/que/viendra/la/video.mp4";
+	private Button boutonPlayPause,boutonStop;  
+    private Rectangle barreControles;
+	ProgressBar progress = new ProgressBar();  
+    BorderPane bordureMenu = new BorderPane();  
+    MenuBar barreMenu = new MenuBar();  
+    Menu menuFichier = new Menu("Fichier");
+    MenuItem menuNouveauFichier=new MenuItem("Nouveau");  
+    MenuItem menuEnregistrer=new MenuItem("Enregistrer");  
+    MenuItem menuQuitter=new MenuItem("Quitter");
+    
+    Menu menuEdition = new Menu("Edition");
+    
+    Menu menuAide = new Menu("Aide");
+    
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
+    
+    public void setChemin(String nomFichier) 
+    {
+    	cheminMedia = nomFichier;
+    	
+    }
+    
+    public String getChemin() 
+    {
+    	return cheminMedia;
+    	
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+
+        StackPane root = new StackPane();
+   
+        final File fichier = new File(cheminMedia); 
+        final Media media = new Media(fichier.toURI().toString()); 
+        final MediaPlayer lecteurMedia = new MediaPlayer(media); 
+        
+        MediaView vueMedia = new MediaView(lecteurMedia);  
+        
+        vueMedia.setFitWidth(800);
+		vueMedia.setFitHeight(700);
+		vueMedia.setSmooth(true);
+		
+		DropShadow dropshadow = new DropShadow();
+		dropshadow.setOffsetY(5.0);
+		dropshadow.setOffsetX(5.0);
+		dropshadow.setColor(Color.GREY);
+		vueMedia.setEffect(dropshadow);
+
+
+        root.getChildren().add(vueMedia);
+        
+        //root.getChildren().add(progress);
+
+        Scene scene = new Scene(root, 900, 650);
+        
+        //Menu pas encore visible, a investiguer
+        bordureMenu.setTop(barreMenu);  
+        menuFichier.getItems().addAll(menuNouveauFichier,menuEnregistrer,menuQuitter);  
+        barreMenu.getMenus().addAll(menuFichier,menuEdition);
+		
+        barreControles = new Rectangle(200,30,Color.DARKGREY);
+        barreControles.setOpacity(0.5);
+        
+		boutonPlayPause = new Button("Play");
+		
+		//Gestion evenementielle pour le bouton Play/Pause
+		// Le bouton n'update pas sa value au 1er event de pause, a verif.
+		boutonPlayPause.setOnAction(new EventHandler <ActionEvent>()
+		{
+            public void handle(ActionEvent event)
+            {
+            	if (lecteurMedia.getStatus() == Status.PLAYING)
+            	{
+            		lecteurMedia.pause();
+            		boutonPlayPause.setText("Play");
+
+            		
+            	}
+            	else
+            	{
+            		lecteurMedia.play();
+            		boutonPlayPause.setText("Pause");
+            	}
+            }
+        });
+
+		
+		boutonStop = new Button("Stop");
+		boutonStop.setOnAction(new EventHandler <ActionEvent>()
+		{
+            public void handle(ActionEvent event)
+            {
+            	lecteurMedia.stop();
+            }
+        });
+
+        //Creation de la Horizontal Box, siege des boutons de controle
+
+		HBox controles = new HBox(5, boutonPlayPause, boutonStop);
+		root.getChildren().add(controles);
+		
+		//ajout de la barre successful, specifier une meilleure position.
+		//Propriete setOpacity interessante pour les scenes et les elements de la timeline.Penser a l'Onion Skin.
+		//root.getChildren().add(barreControles);
+		
+		//Cette ligne detruit l'affichage de la video, no idea why
+		//VBox boiteVerticale = new VBox(5,lecteurMedia,controlBox);
+
+		root.setStyle("-fx-padding: 10;" +
+						
+						"-fx-border-style: solid inside;" +
+						"-fx-border-width: 2;" +
+						"-fx-border-insets: 5;" +
+						"-fx-border-radius: 5;" +
+						"-fx-border-color: #e0e0eb;");
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        
+        ControleElement mediaControl = new ControleElement(lecteurMedia);
+        scene.setRoot(mediaControl);
+
+       lecteurMedia.play();
+
+    }
+
+	
+}
